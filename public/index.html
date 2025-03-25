@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skybound clash</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .text{
+        font-size: larger;
+    }
+    body {
+        transform: scale(0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: black;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+    .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 60px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: orange;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 5px;
+            text-shadow: 0 0 5px orangered, 0 0 2px red;
+        }
+    .game-container {
+      width: 1024px;
+      max-width: 95%;
+      margin: 20px auto;
+      position: relative;
+    }
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    #timer {
+      transform: scale(0.86);
+      font-size: 24px;
+      color: black;
+      margin-bottom: 10px;
+      padding: 8px 15px 8px 50px;
+      background-color:blanchedalmond;
+      border: 2px solid grey; 
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      background-image: url('https://cdn-icons-png.flaticon.com/128/3240/3240627.png');
+      background-repeat: no-repeat;
+      background-position: 10px center;
+      background-size: 24px 24px; 
+    }
+
+    .timer-text {
+      font-weight: bold;
+    }
+
+    .health-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1024px;
+      margin-bottom: 10px;
+    }
+
+    .health-bar-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 45%;
+    }
+
+    .health-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #444;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      margin-top: 5px;
+    }
+
+    .health-bar::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: limegreen;
+      transition: width 0.2s ease-in-out;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      border: 2px solid white;
+      background-color: black;
+    }
+
+    #winner-text {
+      font-size: 2rem;
+      color: #fff;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .health-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .health-bar-wrapper {
+        width: 80%;
+      }
+      canvas {
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+    <br><br>
+    <div class="title"></div><br><br><br>
+  <div class="game-container">
+    <div class="header">
+      <div id="timer">
+        <span class="timer-text">Time: 10s</span>
+      </div>
+      <div class="health-container">
+        <div class="health-bar-wrapper">
+          <span class="text">Player</span>
+          <div class="health-bar player-health"></div>
+        </div>
+        <div class="health-bar-wrapper">
+          <span class="text">Enemy</span>
+          <div class="health-bar enemy-health"></div>
+        </div>
+      </div>
+    </div>
+    <canvas></canvas><br><br>
+    <h1 id="winner-text"></h1>
+  </div>
+  <!-- <script src="skybound.js"></script> -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/index.js"></script>
+  
+</body>
+</html>
