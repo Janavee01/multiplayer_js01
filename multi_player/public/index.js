@@ -11,24 +11,38 @@ const bgimg = new Image();
 bgimg.src = 'https://i.pinimg.com/736x/d1/48/4d/d1484dae779822c963b264fab4790f1e.jpg';
 bgimg.onload = () => c.drawImage(bgimg, 0, 0, canvas.width, canvas.height);
 
-const player = new Character(socket.id, 100, 400);
+// const player = new Character(socket.id, 100, 400);
 let characters = {};
 
 socket.on('currentPlayers', (players) => {
+    characters = {};
+    console.log("Received players:", players);
     players.forEach(player => {
-        characters[player.id] = new Character(player.id, player.x, player.y);
+        console.log(`Player ${player.id} - Position: (${player.x}, ${player.y}), Color: ${player.color}`);
+        characters[player.id] = new Character(player.id, player.x, player.y, player.color);
     });
     drawPlayers();
 });
 
-socket.on('newPlayer', (player) => {
-    characters[player.id] = new Character(player.id, player.x, player.y);
-    drawPlayers();
+socket.on("newPlayer", (player) => {
+    console.log(`New player joined: ${player.id}, Color: ${player.color}`);
+
+    let playerElement = document.createElement("div");
+    playerElement.id = player.id;
+    playerElement.style.width = "50px";
+    playerElement.style.height = "50px";
+    playerElement.style.backgroundColor = player.color;
+    playerElement.style.position = "absolute";
+    playerElement.style.left = player.x + "px";
+    playerElement.style.top = player.y + "px";
+
+    document.body.appendChild(playerElement);
 });
 
 socket.on('updatePlayer', (player) => {
     if (characters[player.id]) {
-        characters[player.id].update();
+        characters[player.id].x = player.x;
+        characters[player.id].y = player.y;
         drawPlayers();
     }
 });
@@ -66,6 +80,11 @@ function gameLoop() {
 
 socket.on('connect', () => {
     console.log("connected socket id", socket.id);
+});
+
+socket.on("connectionRejected",(data) => {
+    alert(data.message);
+    socket.disconnect();
 });
 
 gameLoop();
