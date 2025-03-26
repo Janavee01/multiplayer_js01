@@ -7,12 +7,12 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
 app.use(express.static("public"));
+const PORT = 5000;
 
 let players = {};
 let connectedPlayers = 0;
 
 io.on("connection", (socket) => {
-
     if (connectedPlayers >= 2) {
         console.log(`Rejected connection: ${socket.id}, server is full.`);
         socket.emit("connectionRejected", { message: "Server is full. Try again later." });
@@ -21,7 +21,16 @@ io.on("connection", (socket) => {
     }
 
     console.log(`Player connected: ${socket.id}`);
-    players[socket.id] = new Character(socket.id, 100, 400);
+    
+     if (connectedPlayers === 0) {
+        players[socket.id] = new Character(socket.id, 100, 400);
+        players[socket.id].color = "darkblue";
+     }
+    else if (connectedPlayers === 1) {
+        players[socket.id] = new Character(socket.id, 900, 400);
+        players[socket.id].color = "red";
+    }
+    console.log(`Player ${socket.id} assigned color: ${players[socket.id].color}`);
     connectedPlayers++;
 
     socket.emit('currentPlayers', Object.values(players).map(p => p.serialize()));
@@ -30,13 +39,13 @@ io.on("connection", (socket) => {
     socket.on('move', (direction) => {
         if (players[socket.id]) {
             players[socket.id].move(direction);
-            players[socket.id].update(); // Update player position
-            io.emit('updatePlayer', players[socket.id].serialize()); // Sync with clients
+            players[socket.id].update(); 
+            io.emit('updatePlayer', players[socket.id].serialize()); 
         }
     });
 
     socket.on('attack', () => {
-        if (players[socket.id]) {
+        if (players[socket.id]){
             players[socket.id].attack();
             io.emit('updatePlayer', players[socket.id].serialize());
         }
@@ -50,6 +59,6 @@ io.on("connection", (socket) => {
     });
 });
 
-httpServer.listen(5000, () => {
-    console.log("Server running on port 5000");
+httpServer.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });

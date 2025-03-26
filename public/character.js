@@ -3,6 +3,7 @@ export default class Character {
         this.id = id;  // Unique player ID
         this.x = x;     // Character's X position
         this.y = y;     // Character's Y position
+        this.color = "white";
         this.health = 100;  // Player health
         this.velocity = { x: 0, y: 0 }; // Movement speed
         this.isAttacking = false;
@@ -34,7 +35,7 @@ export default class Character {
     }
 
     draw(c) {
-        c.fillStyle = this.isAttacking ? 'red' : 'blue';
+        c.fillStyle = this.color;
         c.fillRect(this.x, this.y, 50, 190); // Example square sprite for the player
     }
 
@@ -74,6 +75,7 @@ export default class Character {
             id: this.id,
             x: this.x,
             y: this.y,
+            color: this.color, 
             health: this.health,
             isAttacking: this.isAttacking,
             isBlocking: this.isBlocking,
@@ -81,3 +83,4 @@ export default class Character {
         };
     }
 }
+
